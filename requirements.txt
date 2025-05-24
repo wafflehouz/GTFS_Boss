@@ -1,0 +1,13 @@
+fastapi>=0.109.0
+uvicorn>=0.27.0
+gtfs-kit>=5.1.0
+sqlalchemy>=2.0.25
+python-multipart>=0.0.6
+pydantic>=2.6.0
+python-dotenv>=1.0.0
+httpx>=0.26.0
+pytest>=8.0.0
+black>=24.1.0
+flake8>=7.0.0
+mypy>=1.8.0
+pre-commit>=3.6.0 
