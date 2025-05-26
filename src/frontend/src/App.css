@@ -1,0 +1,209 @@
+.App {
+  text-align: center;
+  padding: 20px;
+}
+
+.App-header {
+  margin-bottom: 30px;
+}
+
+.map-container {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.map-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.error-message {
+  color: #ff4444;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #ffeeee;
+  border-radius: 4px;
+}
+
+/* Ensure the map container has a proper height */
+.leaflet-container {
+  height: 600px;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.app {
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.app-header {
+  background-color: #2a2a2a;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #ffffff;
+}
+
+.app-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+.upload-section,
+.map-section {
+  flex: 1;
+  padding: 20px;
+  background-color: #2e2e2e; /* Darker background */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column;
+}
+
+/* Style for the realtime metrics section */
+.realtime-metrics {
+  background-color: #3c3c3c; /* Slightly lighter dark */
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px; /* Space below the metrics */
+  color: #ffffff; /* White text */
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+.realtime-metrics h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #bb86fc; /* Accent color */
+  border-bottom: 1px solid #505050; /* Separator line */
+  padding-bottom: 5px;
+}
+
+.realtime-metrics p {
+  margin: 5px 0;
+}
+
+.map-controls {
+  margin-bottom: 15px;
+}
+
+.map-controls label {
+  margin-right: 15px;
+  color: #ffffff;
+  font-size: 0.9em;
+}
+
+.gtfs-url-input {
+  padding: 8px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background-color: #3a3a3a;
+  color: #ffffff;
+  margin-right: 10px;
+  font-size: 1em;
+}
+
+.gtfs-url-input:focus {
+  outline: none;
+  border-color: #bb86fc; /* Highlight color on focus */
+  box-shadow: 0 0 5px rgba(187, 134, 252, 0.5);
+}
+
+.error-message {
+  color: #ff6b6b; /* Reddish color for errors */
+  background-color: #442e2e; /* Darker red background */
+  border: 1px solid #ff6b6b;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.info-message {
+  color: #8fbc8f; /* Greenish color for info */
+  background-color: #2e442e; /* Darker green background */
+  border: 1px solid #8fbc8f;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.realtime-map {
+  height: 600px; /* Ensure the map container has a height */
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden; /* Ensure map tiles are clipped */
+}
+
+/* Add pulsing animation for severely delayed vehicles */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.vehicle-icon.pulse div {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Map Legend Styles */
+.map-legend {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    z-index: 1000;
+    font-size: 12px;
+}
+
+.map-legend h4 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    text-align: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border: 2px solid white;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.legend-color.pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+} 

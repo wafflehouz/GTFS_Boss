@@ -1,0 +1,92 @@
+# GTFS Boss Cursor Rules
+
+## Project Context
+This is a GTFS (General Transit Feed Specification) analysis and validation tool. The project uses React/TypeScript for frontend and FastAPI for backend.
+
+## Core Rules
+1. Maintain existing color scheme:
+   - Vehicles: Green (on time), Yellow (minor delay), Red (major delay)
+   - Stops: White with black border
+   - Routes: Use agency colors when available
+
+2. Map Interactions:
+   - All clickable elements must show pointer cursor on hover
+   - Popups must follow established format for each element type
+   - Maintain smooth transitions for all interactions
+
+3. Code Structure:
+   - Frontend components in src/frontend/src/components
+   - Backend API in src/backend
+   - Keep TypeScript types strict
+   - Follow existing naming conventions
+
+4. UI Changes:
+   - Must not break existing functionality
+   - Must maintain performance standards
+   - Must follow established design patterns
+   - Must be responsive and accessible
+
+## Testing Requirements
+1. Component Tests:
+   - Test all map interactions (click, hover, zoom)
+   - Verify popup content and formatting
+   - Validate color schemes and styling
+   - Check responsive behavior
+   - Test accessibility features
+
+2. Integration Tests:
+   - Test real-time updates
+   - Verify data flow between components
+   - Check API integration
+   - Validate state management
+
+3. Visual Regression Tests:
+   - Compare screenshots before/after changes
+   - Test different screen sizes
+   - Verify color schemes
+   - Check popup layouts
+
+4. Performance Tests:
+   - Measure render times
+   - Check memory usage
+   - Verify smooth animations
+   - Test with large datasets
+
+## Current Focus
+1. Map visualization and interactions
+2. Real-time monitoring features
+3. GTFS validation improvements
+4. Test coverage improvements
+
+## Future Features
+1. GTFS Diff Tool (High Priority)
+2. Trip Planning Comparison (High Priority)
+3. Schedule Analysis (Medium Priority)
+4. Performance Metrics (Medium Priority)
+
+## Important Files
+- src/frontend/src/components/RealtimeMap.tsx: Main map component
+- src/backend/main.py: Backend API entry point
+- PROJECT.md: Project roadmap and guidelines
+- docs/backend.md: Backend documentation
+- docs/quickstart.md: Quick start guide
+- src/frontend/src/tests/: Test directory
+- src/frontend/src/tests/__snapshots__/: Visual regression tests
+
+## Development Guidelines
+1. Always check PROJECT.md for UI guidelines
+2. Maintain existing code structure
+3. Follow established patterns
+4. Document all changes
+5. Test thoroughly before committing
+6. Run all test suites before submitting changes
+7. Update tests when modifying components
+8. Maintain test coverage above 80%
+
+## Context Preservation
+- Keep track of all map-related changes
+- Maintain consistency in popup formats
+- Preserve existing color schemes
+- Follow established interaction patterns
+- Document test cases for new features
+- Update visual regression tests 
