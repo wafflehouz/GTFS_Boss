@@ -465,22 +465,23 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
 
                  // Add stop layer and event listeners if not already added
                  if (!mapInstance.getLayer(stopLayerId)) {
+                     // Add the stop point layer
                      mapInstance.addLayer({
-                          id: stopLayerId,
-                          type: 'circle',
-                          source: stopSourceId,
-                          paint: {
-                              'circle-radius': 3,
-                              'circle-color': '#ffffff',
-                              'circle-stroke-color': '#000',
-                              'circle-stroke-width': 0.5,
-                              'circle-opacity': 0.8
-                          }
-                      });
+                         id: stopLayerId,
+                         type: 'circle',
+                         source: stopSourceId,
+                         paint: {
+                             'circle-radius': 3,
+                             'circle-color': '#ffffff',
+                             'circle-stroke-color': '#000',
+                             'circle-stroke-width': 0.5,
+                             'circle-opacity': 0.8
+                         }
+                     });
 
-                      mapInstance.on('click', stopLayerId, stopClickHandler);
-                      mapInstance.on('mouseenter', stopLayerId, stopMouseEnterHandler);
-                      mapInstance.on('mouseleave', stopLayerId, stopMouseLeaveHandler);
+                     mapInstance.on('click', stopLayerId, stopClickHandler);
+                     mapInstance.on('mouseenter', stopLayerId, stopMouseEnterHandler);
+                     mapInstance.on('mouseleave', stopLayerId, stopMouseLeaveHandler);
                  }
 
             } else {
