@@ -731,51 +731,32 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
     return (
         <div 
             className={`map-container ${className}`} 
-            style={{ width: '100%', height: '600px', position: 'relative' }}
+            style={{ width: '100%', height: '100%', position: 'relative' }}
             data-testid="map-container"
         >
             {/* Map container */}
             <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
             
             {/* Legend */}
-            <div style={{
-                position: 'absolute',
-                bottom: '20px',
-                right: '20px',
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                padding: '10px',
-                borderRadius: '4px',
-                color: 'white',
-                zIndex: 1000,
-                fontSize: '12px'
-            }}>
-                <h4 style={{ margin: '0 0 10px 0' }}>Vehicle Status</h4>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                    <div style={{ width: '12px', height: '12px', backgroundColor: '#4CAF50', borderRadius: '50%', marginRight: '8px' }}></div>
+            <div className="map-legend">
+                <h4>Vehicle Status</h4>
+                <div className="legend-item">
+                    <div className="legend-color" style={{ backgroundColor: '#4CAF50' }}></div>
                     <span>On Time (±1 min)</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                    <div style={{ width: '12px', height: '12px', backgroundColor: '#FFC107', borderRadius: '50%', marginRight: '8px' }}></div>
+                <div className="legend-item">
+                    <div className="legend-color" style={{ backgroundColor: '#FFC107' }}></div>
                     <span>Minor Delay (±3 min)</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                    <div style={{ width: '12px', height: '12px', backgroundColor: '#FF4444', borderRadius: '50%', marginRight: '8px' }}></div>
+                <div className="legend-item">
+                    <div className="legend-color" style={{ backgroundColor: '#FF4444' }}></div>
                     <span>Major Delay ({'>'}3 min)</span>
                 </div>
             </div>
             
             {/* Error messages */}
             {mapError && (
-                <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    backgroundColor: 'rgba(255, 0, 0, 0.1)',
-                    padding: '1rem',
-                    borderRadius: '4px',
-                    zIndex: 1000
-                }}>
+                <div className="map-error">
                     {mapError}
                 </div>
             )}

@@ -89,25 +89,20 @@ function App() {
       </header>
       
       <main className="app-main">
-        <div className="upload-section">
-          <FileUpload onValidationResults={handleValidationResults} />
-          {validationResults && <ValidationResults result={validationResults} />}
-        </div>
-
-        <div className="map-section">
+        <section className="map-section">
           <div className="map-controls">
-             <label>
-               <input type="checkbox" checked={showRoutes} onChange={(e) => setShowRoutes(e.target.checked)} />
-               Show Routes
-             </label>
-             <label>
-               <input type="checkbox" checked={showStops} onChange={(e) => setShowStops(e.target.checked)} />
-               Show Stops
-             </label>
-             <label>
-               <input type="checkbox" checked={showVehicles} onChange={(e) => setShowVehicles(e.target.checked)} />
-               Show Vehicles
-             </label>
+            <label>
+              <input type="checkbox" checked={showRoutes} onChange={(e) => setShowRoutes(e.target.checked)} />
+              Show Routes
+            </label>
+            <label>
+              <input type="checkbox" checked={showStops} onChange={(e) => setShowStops(e.target.checked)} />
+              Show Stops
+            </label>
+            <label>
+              <input type="checkbox" checked={showVehicles} onChange={(e) => setShowVehicles(e.target.checked)} />
+              Show Vehicles
+            </label>
           </div>
           <RealtimeMap
             className="realtime-map"
@@ -117,36 +112,18 @@ function App() {
             showVehicles={showVehicles}
             onRealtimeDataFetched={handleRealtimeDataFetched}
           />
+        </section>
+      </main>
+
+      <div className="content-section">
+        <div className="upload-section">
+          <FileUpload onValidationResults={handleValidationResults} />
+          {validationResults && <ValidationResults result={validationResults} />}
         </div>
-
-        {(realtimeMetrics || metricsError) && (
-          <div className="realtime-metrics-section">
-            <h2>Real-time Performance</h2>
-            {metricsError && (
-              <div className="error-message">
-                Error fetching real-time metrics: {metricsError}
-              </div>
-            )}
-            {realtimeMetrics && (
-              <div className="realtime-metrics">
-                <h4>Metrics Summary</h4>
-                <p>Total Vehicles Reporting Deviation: {realtimeMetrics.total_vehicles_reporting_deviation}</p>
-                <p>On-Time Vehicles: {realtimeMetrics.on_time_vehicles}</p>
-                <p>On-Time Percentage: {realtimeMetrics.on_time_percentage}%</p>
-                <p>Early Vehicles: {realtimeMetrics.early_vehicles_count}</p>
-                <p>Late Vehicles: {realtimeMetrics.late_vehicles_count}</p>
-                <p>Average Early Deviation: {formatScheduleDeviation(-realtimeMetrics.average_early_deviation_seconds)}</p>
-                <p>Average Late Deviation: {formatScheduleDeviation(realtimeMetrics.average_late_deviation_seconds)}</p>
-                <p>Average Overall Deviation: {formatScheduleDeviation(realtimeMetrics.average_overall_deviation_seconds)}</p>
-              </div>
-            )}
-          </div>
-        )}
-
         <div className="service-alerts-section">
           <ServiceAlertsDisplay alerts={serviceAlerts} />
         </div>
-      </main>
+      </div>
     </div>
   );
 }
