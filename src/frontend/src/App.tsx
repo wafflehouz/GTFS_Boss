@@ -4,6 +4,7 @@ import './App.css';
 import FileUpload from './components/FileUpload';
 import ValidationResults from './components/ValidationResults';
 import RealtimeMap from './components/RealtimeMap';
+import Navigation from './components/Navigation';
 import type { RealtimeData, RealtimeMetrics, Alert, ValidationResults as ValidationResultsType } from './types';
 import ServiceAlertsDisplay from './components/ServiceAlertsDisplay';
 
@@ -84,9 +85,7 @@ function App() {
 
   return (
     <div className="app">
-      <header className="app-header">
-        <h1>GTFS Boss</h1>
-      </header>
+      <Navigation />
       
       <main className="app-main">
         <section className="map-section">
