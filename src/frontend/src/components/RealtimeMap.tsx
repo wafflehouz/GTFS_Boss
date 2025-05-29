@@ -99,7 +99,11 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
                     center: center,
                     zoom: 12,
                     bearing: 0,
-                    pitch: 0
+                    pitch: 30,
+                    maxPitch: 60,
+                    minPitch: 0,
+                    maxZoom: 18,
+                    minZoom: 5
                 });
 
                 // Add navigation control (zoom and rotation buttons) to the map
@@ -108,6 +112,40 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
                 // Store the map instance in the ref
                 map.current = mapInstance;
 
+                // Add 3D building layer after the map loads
+                mapInstance.on('load', () => {
+                    // Add 3D building layer
+                    mapInstance.addLayer({
+                        'id': '3d-buildings',
+                        'source': 'composite',
+                        'source-layer': 'building',
+                        'filter': ['==', 'extrude', 'true'],
+                        'type': 'fill-extrusion',
+                        'minzoom': 12,
+                        'paint': {
+                            'fill-extrusion-color': '#2a2a2a',
+                            'fill-extrusion-height': [
+                                'interpolate',
+                                ['linear'],
+                                ['zoom'],
+                                12, 0,
+                                15, ['get', 'height']
+                            ],
+                            'fill-extrusion-base': [
+                                'interpolate',
+                                ['linear'],
+                                ['zoom'],
+                                12, 0,
+                                15, ['get', 'min_height']
+                            ],
+                            'fill-extrusion-opacity': 0.6
+                        }
+                    });
+
+                    setMapError(null);
+                    setIsMapLoaded(true);
+                });
+
                 // Add event listener for missing style images
                 mapInstance.on('styleimagemissing', (e) => {
                     // Workaround: Add a transparent 1x1 image if a style image is missing
@@ -115,12 +153,6 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
                          const transparentPixel = new Uint8Array([0, 0, 0, 0]);
                          mapInstance.addImage(e.id, { width: 1, height: 1, data: transparentPixel });
                     }
-                });
-
-                // Add event listener for the map's load event
-                mapInstance.on('load', () => {
-                    setMapError(null);
-                    setIsMapLoaded(true);
                 });
 
                 // Add error handler
