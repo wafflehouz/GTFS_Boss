@@ -511,116 +511,195 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
      */
     useEffect(() => {
         // Ensure map is initialized, style is loaded, showVehicles is true, and real-time data with vehicles is available
-        if (!map.current || !isMapLoaded || !showVehicles || !realtimeData || !realtimeData.vehicles) { // Depend on isMapLoaded
+        if (!map.current || !isMapLoaded || !showVehicles || !realtimeData || !realtimeData.vehicles) {
             // Remove all existing vehicle markers if map instance exists
             if (map.current) {
                 Object.values(vehicleMarkers.current).forEach(marker => marker.remove());
             }
             // Clear the vehicle markers reference object
             vehicleMarkers.current = {};
-            return; // Exit if conditions for drawing are not met
+            return;
         }
 
         const mapInstance = map.current;
-        // Filter vehicles to include only those with position data
         const vehiclesWithPositions = realtimeData.vehicles.filter(v => v.position);
         const currentMarkers = vehicleMarkers.current;
         const nextMarkers: { [key: string]: Marker } = {};
 
-        // Iterate over vehicles with positions to update or create markers
-        vehiclesWithPositions.forEach(vehicle => {
-            const vehicleId = vehicle.id;
-            const position = vehicle.position!; // Non-null assertion is safe due to filter
+        // Create a GeoJSON source for clustering
+        const vehicleSourceId = 'vehicles';
+        const vehicleClusterLayerId = 'vehicle-clusters';
+        const vehicleClusterCountLayerId = 'vehicle-cluster-count';
+        const vehicleUnclusteredLayerId = 'vehicle-unclustered';
 
-            if (currentMarkers[vehicleId]) {
-                // If marker already exists, update its position and rotation
-                currentMarkers[vehicleId]
-                    .setLngLat([position.longitude, position.latitude])
-                    .setRotation(position.bearing || 0); // Update rotation, default to 0 if bearing is null/undefined
+        // Add or update the vehicle source
+        if (!mapInstance.getSource(vehicleSourceId)) {
+            mapInstance.addSource(vehicleSourceId, {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: vehiclesWithPositions.map(vehicle => ({
+                        type: 'Feature',
+                        properties: {
+                            id: vehicle.id,
+                            bearing: vehicle.position?.bearing || 0,
+                            deviation: vehicle.scheduleDeviation,
+                            label: vehicle.label,
+                            status: vehicle.currentStatus,
+                            routeId: vehicle.trip?.routeId,
+                            directionId: vehicle.trip?.directionId,
+                            tripId: vehicle.trip?.tripId,
+                            stopId: vehicle.stopId,
+                            congestionLevel: vehicle.congestionLevel,
+                            occupancyStatus: vehicle.occupancyStatus,
+                            speed: vehicle.position?.speed
+                        },
+                        geometry: {
+                            type: 'Point',
+                            coordinates: [vehicle.position!.longitude, vehicle.position!.latitude]
+                        }
+                    }))
+                },
+                cluster: true,
+                clusterMaxZoom: 11,
+                clusterRadius: 90
+            });
 
-                // Create popup content string
-                 const popupContent = `
-                     <div>
-                         <h3>Vehicle ${vehicle.label || 'N/A'}</h3>
-                         <p>Status: ${vehicle.currentStatus || 'N/A'}</p>
-                         <p>Route: ${vehicle.trip?.routeId || 'N/A'}</p>
-                         <p>Direction: ${getDirectionName(vehicle.trip?.directionId)}</p>
-                         <p>Schedule: ${formatScheduleDeviation(vehicle.scheduleDeviation)}</p>
-                         ${vehicle.congestionLevel ? `<p>Congestion: ${getCongestionLevel(vehicle.congestionLevel)}</p>` : ''}
-                         ${vehicle.occupancyStatus ? `<p>Occupancy: ${getOccupancyStatus(vehicle.occupancyStatus)}</p>` : ''}
-                         <p>Trip ID: ${vehicle.trip?.tripId || 'N/A'}</p>
-                         <p>Stop ID: ${vehicle.stopId || 'N/A'}</p>
-                         ${position.bearing != null ? `<p>Bearing: ${Number(position.bearing).toFixed(2)}</p>` : ''}
-                         ${position.speed != null ? `<p>Speed: ${Number(position.speed).toFixed(2)} km/h</p>` : ''}
-                     </div>
-                 `;
+            // Add the cluster layer
+            mapInstance.addLayer({
+                id: vehicleClusterLayerId,
+                type: 'circle',
+                source: vehicleSourceId,
+                filter: ['has', 'point_count'],
+                paint: {
+                    'circle-color': [
+                        'step',
+                        ['get', 'point_count'],
+                        '#4CAF50',
+                        5, '#FFC107',
+                        10, '#FF4444'
+                    ],
+                    'circle-radius': [
+                        'step',
+                        ['get', 'point_count'],
+                        20,
+                        5, 30,
+                        10, 40
+                    ],
+                    'circle-opacity': 0.8
+                }
+            });
 
-                 // Check if popup content has changed before updating to avoid unnecessary DOM manipulation
-                 // Add null checks for getPopup() and getElement()
-                 if (currentMarkers[vehicleId].getPopup()?.getElement()?.innerHTML !== popupContent) {
-                     currentMarkers[vehicleId]?.setPopup(new Popup({ offset: 25 }).setHTML(popupContent));
-                 }
+            // Add the cluster count layer
+            mapInstance.addLayer({
+                id: vehicleClusterCountLayerId,
+                type: 'symbol',
+                source: vehicleSourceId,
+                filter: ['has', 'point_count'],
+                layout: {
+                    'text-field': '{point_count_abbreviated}',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 12
+                },
+                paint: {
+                    'text-color': '#ffffff'
+                }
+            });
 
-                // Keep the existing marker and remove it from the currentMarkers list
-                nextMarkers[vehicleId] = currentMarkers[vehicleId];
-                delete currentMarkers[vehicleId];
+            // Add the unclustered point layer
+            mapInstance.addLayer({
+                id: vehicleUnclusteredLayerId,
+                type: 'circle',
+                source: vehicleSourceId,
+                filter: ['!', ['has', 'point_count']],
+                paint: {
+                    'circle-color': [
+                        'case',
+                        ['has', 'deviation'],
+                        [
+                            'case',
+                            ['<=', ['abs', ['get', 'deviation']], 60], '#4CAF50',
+                            ['<=', ['abs', ['get', 'deviation']], 180], '#FFC107',
+                            '#FF4444'
+                        ],
+                        '#4CAF50'
+                    ],
+                    'circle-radius': 7,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': '#ffffff'
+                }
+            });
 
-            } else {
-                // If marker does not exist, create a new one
-                const marker = new Marker({
-                    // Create a custom HTML element for the marker icon
-                     element: createVehicleIconElement(position.bearing || 0, vehicle.scheduleDeviation).element,
-                    anchor: 'center' // Set the anchor point of the icon
-                 })
-                    // Set the marker's geographic coordinates
-                    .setLngLat([position.longitude, position.latitude]);
+            // Add click handler for clusters
+            mapInstance.on('click', vehicleClusterLayerId, (e) => {
+                const features = mapInstance.queryRenderedFeatures(e.point, {
+                    layers: [vehicleClusterLayerId]
+                });
+                const clusterId = features[0].properties?.cluster_id;
+                const source = mapInstance.getSource(vehicleSourceId) as any;
+                source.getClusterExpansionZoom(clusterId, (err: any, zoom: number) => {
+                    if (err) return;
+                    mapInstance.easeTo({
+                        center: (features[0].geometry as any).coordinates,
+                        zoom: zoom
+                    });
+                });
+            });
 
-                // Create popup content string for the new marker
-                const popupContent = `
-                    <div>
-                        <h3>Vehicle ${vehicle.label || 'N/A'}</h3>
-                        <p>Status: ${vehicle.currentStatus || 'N/A'}</p>
-                        <p>Route: ${vehicle.trip?.routeId || 'N/A'}</p>
-                        <p>Direction: ${getDirectionName(vehicle.trip?.directionId)}</p>
-                        <p>Schedule: ${formatScheduleDeviation(vehicle.scheduleDeviation)}</p>
-                        ${vehicle.congestionLevel ? `<p>Congestion: ${getCongestionLevel(vehicle.congestionLevel)}</p>` : ''}
-                        ${vehicle.occupancyStatus ? `<p>Occupancy: ${getOccupancyStatus(vehicle.occupancyStatus)}</p>` : ''}
-                        <p>Trip ID: ${vehicle.trip?.tripId || 'N/A'}</p>
-                        <p>Stop ID: ${vehicle.stopId || 'N/A'}</p>
-                         ${position.bearing != null ? `<p>Bearing: ${Number(position.bearing).toFixed(2)}</p>` : ''}
-                         ${position.speed != null ? `<p>Speed: ${Number(position.speed).toFixed(2)} km/h</p>` : ''}
-                     </div>
-                 `;
+            // Add mouse handlers for clusters
+            mapInstance.on('mouseenter', vehicleClusterLayerId, () => {
+                mapInstance.getCanvas().style.cursor = 'pointer';
+            });
+            mapInstance.on('mouseleave', vehicleClusterLayerId, () => {
+                mapInstance.getCanvas().style.cursor = '';
+            });
+        } else {
+            // Update the source data
+            (mapInstance.getSource(vehicleSourceId) as any).setData({
+                type: 'FeatureCollection',
+                features: vehiclesWithPositions.map(vehicle => ({
+                    type: 'Feature',
+                    properties: {
+                        id: vehicle.id,
+                        bearing: vehicle.position?.bearing || 0,
+                        deviation: vehicle.scheduleDeviation,
+                        label: vehicle.label,
+                        status: vehicle.currentStatus,
+                        routeId: vehicle.trip?.routeId,
+                        directionId: vehicle.trip?.directionId,
+                        tripId: vehicle.trip?.tripId,
+                        stopId: vehicle.stopId,
+                        congestionLevel: vehicle.congestionLevel,
+                        occupancyStatus: vehicle.occupancyStatus,
+                        speed: vehicle.position?.speed
+                    },
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [vehicle.position!.longitude, vehicle.position!.latitude]
+                    }
+                }))
+            });
+        }
 
-                // Create a new MapTiler GL JS popup with the content
-                const popup = new Popup({ offset: 25 }).setHTML(popupContent);
-                // Attach the popup to the marker
-                marker.setPopup(popup);
-
-                // Add the new marker to the map if the map instance exists
-                 if (mapInstance) {
-                    marker.addTo(mapInstance);
-                 }
-                // Store the new marker in the nextMarkers list
-                nextMarkers[vehicleId] = marker;
+        // Cleanup function
+        return () => {
+            if (mapInstance) {
+                if (mapInstance.getLayer(vehicleClusterLayerId)) {
+                    mapInstance.removeLayer(vehicleClusterLayerId);
+                }
+                if (mapInstance.getLayer(vehicleClusterCountLayerId)) {
+                    mapInstance.removeLayer(vehicleClusterCountLayerId);
+                }
+                if (mapInstance.getLayer(vehicleUnclusteredLayerId)) {
+                    mapInstance.removeLayer(vehicleUnclusteredLayerId);
+                }
+                if (mapInstance.getSource(vehicleSourceId)) {
+                    mapInstance.removeSource(vehicleSourceId);
+                }
             }
-        });
+        };
 
-        // Remove markers that are no longer present in the updated data
-        Object.values(currentMarkers).forEach(marker => marker.remove());
-
-        // Update the vehicleMarkers ref with the new set of markers
-        vehicleMarkers.current = nextMarkers;
-
-         // Cleanup function to remove all vehicle markers when dependencies change or component unmounts
-         return () => {
-             // Iterate over the current markers and remove them from the map
-             Object.values(vehicleMarkers.current).forEach(marker => marker.remove());
-             // Clear the vehicle markers reference object
-             vehicleMarkers.current = {};
-         };
-
-    }, [realtimeData, showVehicles, isMapLoaded]); // Re-run effect when realtimeData, showVehicles, or isMapLoaded changes
+    }, [realtimeData, showVehicles, isMapLoaded]);
 
     /**
      * Helper function to translate direction ID to a human-readable string.
