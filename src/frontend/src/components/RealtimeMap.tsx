@@ -317,13 +317,13 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
                 new Popup()
                     .setLngLat(e.lngLat)
                     .setHTML(`
-                        <div style="padding: 5px;">
+                        <div class="route-info">
                             <div style="display: flex; align-items: center; margin-bottom: 10px;">
                                 ${colorPreview.outerHTML}
-                                <h3 style="margin: 0;">Route ${routeShortName}</h3>
+                                <h3>Route ${routeShortName}</h3>
                             </div>
-                            <p style="margin: 0 0 5px 0;"><strong>Route ID:</strong> ${routeId}</p>
-                            <p style="margin: 0;"><strong>Description:</strong> ${routeLongName}</p>
+                            <p>Route ID: ${routeId}</p>
+                            <p>Description: ${routeLongName}</p>
                         </div>
                     `)
                     .addTo(mapInstance);
@@ -364,10 +364,10 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
                 new Popup()
                     .setLngLat(e.lngLat)
                     .setHTML(`
-                        <div style="padding: 5px;">
-                            <h3 style="margin: 0 0 5px 0;">${stopName}</h3>
-                            <p style="margin: 0;">ID: ${stopId}</p>
-                            ${stopDesc !== 'N/A' ? `<p style="margin: 5px 0 0 0;">${stopDesc}</p>` : ''}
+                        <div class="stop-info">
+                            <h3>${stopName}</h3>
+                            <p>ID: ${stopId}</p>
+                            ${stopDesc !== 'N/A' ? `<p>${stopDesc}</p>` : ''}
                         </div>
                     `)
                     .addTo(mapInstance);
@@ -628,6 +628,45 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
                     'circle-stroke-width': 1,
                     'circle-stroke-color': '#ffffff'
                 }
+            });
+
+            // Add click handler for individual vehicles
+            mapInstance.on('click', vehicleUnclusteredLayerId, (e) => {
+                const features = mapInstance.queryRenderedFeatures(e.point, {
+                    layers: [vehicleUnclusteredLayerId]
+                });
+                
+                if (features[0]) {
+                    const props = features[0].properties;
+                    const popupContent = `
+                        <div class="vehicle-info">
+                            <h3>Vehicle ${props.label || 'N/A'}</h3>
+                            <p>Status: ${props.status || 'N/A'}</p>
+                            <p>Route: ${props.routeId || 'N/A'}</p>
+                            <p>Direction: ${getDirectionName(props.directionId)}</p>
+                            <p>Schedule: ${formatScheduleDeviation(props.deviation)}</p>
+                            ${props.congestionLevel ? `<p>Congestion: ${getCongestionLevel(props.congestionLevel)}</p>` : ''}
+                            ${props.occupancyStatus ? `<p>Occupancy: ${getOccupancyStatus(props.occupancyStatus)}</p>` : ''}
+                            <p>Trip ID: ${props.tripId || 'N/A'}</p>
+                            <p>Stop ID: ${props.stopId || 'N/A'}</p>
+                            ${props.bearing != null ? `<p>Bearing: ${Number(props.bearing).toFixed(2)}</p>` : ''}
+                            ${props.speed != null ? `<p>Speed: ${Number(props.speed).toFixed(2)} km/h</p>` : ''}
+                        </div>
+                    `;
+
+                    new Popup()
+                        .setLngLat(e.lngLat)
+                        .setHTML(popupContent)
+                        .addTo(mapInstance);
+                }
+            });
+
+            // Add mouse handlers for individual vehicles
+            mapInstance.on('mouseenter', vehicleUnclusteredLayerId, () => {
+                mapInstance.getCanvas().style.cursor = 'pointer';
+            });
+            mapInstance.on('mouseleave', vehicleUnclusteredLayerId, () => {
+                mapInstance.getCanvas().style.cursor = '';
             });
 
             // Add click handler for clusters
