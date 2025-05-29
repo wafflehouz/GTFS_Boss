@@ -470,8 +470,9 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
                          id: stopLayerId,
                          type: 'circle',
                          source: stopSourceId,
+                         minzoom: 15,  // Changed to 15 to only show stops when zoomed in closer
                          paint: {
-                             'circle-radius': 3,
+                             'circle-radius': 2,
                              'circle-color': '#ffffff',
                              'circle-stroke-color': '#000',
                              'circle-stroke-width': 0.5,
@@ -718,10 +719,10 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
         iconDiv.className = `vehicle-icon ${pulse}`;
         // Add inline styles for size, color, border, border-radius, and rotation
         iconDiv.style.cssText = `
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             background-color: ${color};
-            border: 2px solid white;
+            border: 1px solid white;
             border-radius: 50%;
             transform: rotate(${bearing}deg);
             cursor: pointer;
