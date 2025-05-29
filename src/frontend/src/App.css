@@ -225,10 +225,15 @@ html, body, #root {
 .map-container .legend-color {
   width: 12px !important;
   height: 12px !important;
-  border: 2px solid white !important;
+  border: 1px solid white !important;
   border-radius: 50% !important;
   margin-right: 8px !important;
   flex-shrink: 0 !important;
+}
+
+.map-container .legend-color.no-data {
+  background-color: #000000 !important;
+  border: 1px solid #333333 !important;
 }
 
 .map-container .legend-item span {

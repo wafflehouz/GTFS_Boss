@@ -94,7 +94,7 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
                 // Create a new MapTiler GL JS map instance
                 const mapInstance = new Map({
                     container: mapContainer.current!,
-                    style: MapStyle.STREETS.DARK,
+                    style: MapStyle.STREETS.NIGHT,
                     apiKey: MAPTILER_TOKEN,
                     center: center,
                     zoom: 12,
@@ -903,6 +903,10 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
                 <div className="legend-item">
                     <div className="legend-color" style={{ backgroundColor: '#FF4444' }}></div>
                     <span>Major Delay ({'>'}3 min)</span>
+                </div>
+                <div className="legend-item">
+                    <div className="legend-color no-data"></div>
+                    <span>No Data</span>
                 </div>
             </div>
             
