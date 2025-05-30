@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './Options.css';
 
 interface OptionsProps {
@@ -19,16 +19,44 @@ const Options: React.FC<OptionsProps> = ({
   onToggleRoutes,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const timeoutRef = useRef<number | undefined>(undefined);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setIsOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = window.setTimeout(() => {
+      setIsOpen(false);
+    }, 200); // Small delay to prevent accidental closing
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
-    <div className="options-container">
+    <div 
+      className="options-container"
+      ref={containerRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <button 
         className="options-button"
-        onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        Options
+        Layers
       </button>
       {isOpen && (
         <div className="options-dropdown">

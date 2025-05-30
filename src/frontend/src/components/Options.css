@@ -32,6 +32,9 @@
   min-width: 200px;
   z-index: 2001;
   margin-top: 0.5rem;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .options-section {
@@ -60,6 +63,11 @@
   color: rgba(255, 255, 255, 0.9);
   font-size: 0.9rem;
   cursor: pointer;
+  transition: color 0.2s;
+}
+
+.option-item:hover {
+  color: var(--primary-color);
 }
 
 .option-item input[type="checkbox"] {
