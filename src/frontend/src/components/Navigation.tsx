@@ -1,6 +1,7 @@
 import React from 'react';
 import './Navigation.css';
 import Options from './Options';
+import Tools from './Tools';
 
 interface NavigationProps {
   showVehicles: boolean;
@@ -25,6 +26,7 @@ const Navigation: React.FC<NavigationProps> = ({
         <h1>GTFS Boss</h1>
       </div>
       <div className="nav-menu">
+        <Tools />
         <Options
           showVehicles={showVehicles}
           showStops={showStops}
