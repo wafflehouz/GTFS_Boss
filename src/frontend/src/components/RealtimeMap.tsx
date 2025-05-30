@@ -52,6 +52,8 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
     const mapContainer = useRef<HTMLDivElement>(null);
     // Reference to the MapTiler GL JS map instance
     const map = useRef<Map | null>(null);
+    // Flag to track if the navigation control has been added
+    const navigationControlAdded = useRef<boolean>(false);
     // Reference to store MapTiler GL JS vehicle markers
     const vehicleMarkers = useRef<{ [key: string]: Marker }>({});
     // State to store fetched static route GeoJSON features
@@ -105,9 +107,6 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
                     maxZoom: 18,
                     minZoom: 5
                 });
-
-                // Add navigation control (zoom and rotation buttons) to the map
-                mapInstance.addControl(new NavigationControl());
 
                 // Store the map instance in the ref
                 map.current = mapInstance;
@@ -236,6 +235,7 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
     useEffect(() => {
         // Fetch route geometry if validation results are available
         if (validationResults) {
+            console.log('Validation results available:', validationResults);
             const fetchRouteGeometry = async () => {
                 try {
                     const response = await fetch('http://localhost:8000/api/v1/routes/geometry');
@@ -324,6 +324,15 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
         const routeLayerId = 'routes-layer';
         const stopSourceId = 'stops';
         const stopLayerId = 'stops-layer';
+
+        console.log('Layer visibility state:', {
+            showRoutes,
+            showStops,
+            showVehicles,
+            hasRouteFeatures: !!routeFeatures,
+            hasStopGeometry: !!stopGeometry,
+            isMapLoaded
+        });
 
         // Define event handlers for the routes layer
         const routeClickHandler = (e: any) => {

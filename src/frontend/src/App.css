@@ -246,7 +246,7 @@ html, body, #root {
 
 .map-container .legend-color.no-data {
   background-color: #000000 !important;
-  border: 1px solid #333333 !important;
+  border: 1px solid white !important;
 }
 
 .map-container .legend-item span {
