@@ -1,16 +1,38 @@
 import React from 'react';
 import './Navigation.css';
+import Options from './Options';
 
-const Navigation: React.FC = () => {
+interface NavigationProps {
+  showVehicles: boolean;
+  showStops: boolean;
+  showRoutes: boolean;
+  onToggleVehicles: () => void;
+  onToggleStops: () => void;
+  onToggleRoutes: () => void;
+}
+
+const Navigation: React.FC<NavigationProps> = ({
+  showVehicles,
+  showStops,
+  showRoutes,
+  onToggleVehicles,
+  onToggleStops,
+  onToggleRoutes,
+}) => {
   return (
     <nav className="nav">
       <div className="nav-brand">
         <h1>GTFS Boss</h1>
       </div>
       <div className="nav-menu">
-        <a href="#" className="nav-item">Home</a>
-        <a href="#" className="nav-item">Documentation</a>
-        <a href="#" className="nav-item">About</a>
+        <Options
+          showVehicles={showVehicles}
+          showStops={showStops}
+          showRoutes={showRoutes}
+          onToggleVehicles={onToggleVehicles}
+          onToggleStops={onToggleStops}
+          onToggleRoutes={onToggleRoutes}
+        />
       </div>
     </nav>
   );

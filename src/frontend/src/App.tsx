@@ -85,30 +85,23 @@ function App() {
 
   return (
     <div className="app">
-      <Navigation />
+      <Navigation
+        showVehicles={showVehicles}
+        showStops={showStops}
+        showRoutes={showRoutes}
+        onToggleVehicles={() => setShowVehicles(!showVehicles)}
+        onToggleStops={() => setShowStops(!showStops)}
+        onToggleRoutes={() => setShowRoutes(!showRoutes)}
+      />
       
       <main className="app-main">
         <section className="map-section">
-          <div className="map-controls">
-            <label>
-              <input type="checkbox" checked={showRoutes} onChange={(e) => setShowRoutes(e.target.checked)} />
-              Show Routes
-            </label>
-            <label>
-              <input type="checkbox" checked={showStops} onChange={(e) => setShowStops(e.target.checked)} />
-              Show Stops
-            </label>
-            <label>
-              <input type="checkbox" checked={showVehicles} onChange={(e) => setShowVehicles(e.target.checked)} />
-              Show Vehicles
-            </label>
-          </div>
           <RealtimeMap
             className="realtime-map"
             validationResults={validationResults}
-            showRoutes={showRoutes}
-            showStops={showStops}
             showVehicles={showVehicles}
+            showStops={showStops}
+            showRoutes={showRoutes}
             onRealtimeDataFetched={handleRealtimeDataFetched}
           />
         </section>
