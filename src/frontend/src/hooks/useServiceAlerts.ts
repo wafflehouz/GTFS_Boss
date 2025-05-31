@@ -9,14 +9,16 @@ export const useServiceAlerts = () => {
   useEffect(() => {
     const fetchAlerts = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/v1/alerts');
+        const response = await fetch('http://localhost:8000/api/v1/realtime/vehicles');
         if (!response.ok) {
           throw new Error('Failed to fetch service alerts');
         }
         const data = await response.json();
+        console.log('Service Alerts Response:', data); // Debug log
         setAlerts(data.alerts || []);
         setError(null);
       } catch (err) {
+        console.error('Error fetching alerts:', err); // Debug log
         setError(err instanceof Error ? err.message : 'Failed to fetch service alerts');
         setAlerts([]);
       } finally {

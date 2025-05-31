@@ -18,7 +18,7 @@
 
 .toggle-button {
   position: absolute;
-  top: 40px; /* Increased from 20px to account for navbar */
+  top: 50px; /* Increased from 40px to make room for the alert badge */
   right: -40px;
   width: 40px;
   height: 40px;

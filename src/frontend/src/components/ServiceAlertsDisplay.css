@@ -1,0 +1,125 @@
+.service-alerts-container {
+  padding: 1rem;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.service-alerts-container h4 {
+  margin: 0 0 1rem 0;
+  color: #fff;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #333;
+  padding: 40px 0 0.5rem 0;
+}
+
+.no-alerts {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.alert-item {
+  background: #2a2a2a;
+  border-radius: 8px;
+  padding: 1rem;
+  border-left: 4px solid #ff4444;
+}
+
+.alert-header {
+  margin-bottom: 0.5rem;
+}
+
+.alert-header h5 {
+  margin: 0 0 0.5rem 0;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.alert-cause {
+  display: inline-block;
+  background: #444;
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.alert-description {
+  color: #ddd;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.alert-effect {
+  color: #ddd;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.alert-entities {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.alert-entities strong {
+  color: #fff;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.alert-entities ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.alert-entities li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.entity-route {
+  background: #4a4a4a;
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.entity-stop {
+  background: #4a4a4a;
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.entity-trip {
+  background: #4a4a4a;
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.alert-link {
+  display: inline-block;
+  color: #bb86fc;
+  text-decoration: none;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.alert-link:hover {
+  text-decoration: underline;
+} 
