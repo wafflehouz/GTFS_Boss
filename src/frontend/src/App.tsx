@@ -6,7 +6,8 @@ import ValidationResults from './components/ValidationResults';
 import RealtimeMap from './components/RealtimeMap';
 import Navigation from './components/Navigation';
 import type { RealtimeData, RealtimeMetrics, Alert, ValidationResults as ValidationResultsType } from './types';
-import ServiceAlertsDisplay from './components/ServiceAlertsDisplay';
+import ServiceAlertsSidebar from './components/ServiceAlertsSidebar';
+import { useServiceAlerts } from './hooks/useServiceAlerts';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -53,6 +54,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 }
 
 function App() {
+  const { alerts, loading, error } = useServiceAlerts();
   const [validationResults, setValidationResults] = useState<ValidationResultsType | undefined>(() => {
     // Try to load validation results from localStorage on initial render
     const savedResults = localStorage.getItem('validationResults');
@@ -63,7 +65,6 @@ function App() {
   const [showVehicles, setShowVehicles] = useState<boolean>(true);
   const [realtimeMetrics, setRealtimeMetrics] = useState<RealtimeMetrics | null>(null);
   const [metricsError, setMetricsError] = useState<string | null>(null);
-  const [serviceAlerts, setServiceAlerts] = useState<Alert[]>([]);
 
   const handleValidationResults = (results: ValidationResultsType) => {
     setValidationResults(results);
@@ -74,11 +75,9 @@ function App() {
   const handleRealtimeDataFetched = (data: RealtimeData | null) => {
     if (data) {
       setRealtimeMetrics(data.realtimeMetrics);
-      setServiceAlerts(data.alerts || []);
       setMetricsError(null);
     } else {
       setRealtimeMetrics(null);
-      setServiceAlerts([]);
       setMetricsError('Failed to fetch real-time data');
     }
   };
@@ -113,7 +112,7 @@ function App() {
           {validationResults && <ValidationResults result={validationResults} />}
         </div>
         <div className="service-alerts-section">
-          <ServiceAlertsDisplay alerts={serviceAlerts} />
+          <ServiceAlertsSidebar alerts={alerts} />
         </div>
       </div>
     </div>
