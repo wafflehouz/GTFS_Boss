@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import './Tools.css';
 
 interface ToolsProps {
-  // Add any props needed for tools functionality
+  onValidationClick: () => void;
 }
 
-const Tools: React.FC<ToolsProps> = () => {
+const Tools: React.FC<ToolsProps> = ({ onValidationClick }) => {
   const [isOpen, setIsOpen] = useState(false);
   const timeoutRef = useRef<number | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -21,6 +21,11 @@ const Tools: React.FC<ToolsProps> = () => {
     timeoutRef.current = window.setTimeout(() => {
       setIsOpen(false);
     }, 200); // Small delay to prevent accidental closing
+  };
+
+  const handleValidationClick = () => {
+    onValidationClick();
+    setIsOpen(false); // Close the tools menu after clicking
   };
 
   // Cleanup timeout on unmount
@@ -49,7 +54,7 @@ const Tools: React.FC<ToolsProps> = () => {
       {isOpen && (
         <div className="tools-dropdown">
           <div className="tools-controls">
-            <button className="tool-item">
+            <button className="tool-item" onClick={handleValidationClick}>
               GTFS Validation
             </button>
             <button className="tool-item coming-soon">

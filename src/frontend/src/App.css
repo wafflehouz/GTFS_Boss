@@ -58,6 +58,7 @@ html, body, #root {
   bottom: 0;
   margin: 0;
   padding: 0;
+  z-index: 0;
 }
 
 .realtime-map {
@@ -68,6 +69,7 @@ html, body, #root {
   bottom: 0;
   margin: 0;
   padding: 0;
+  z-index: 0;
 }
 
 /* Content section below map */
