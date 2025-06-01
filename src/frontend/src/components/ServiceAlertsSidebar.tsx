@@ -8,7 +8,7 @@ interface ServiceAlertsSidebarProps {
 }
 
 const ServiceAlertsSidebar: React.FC<ServiceAlertsSidebarProps> = ({ alerts }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   
   console.log('ServiceAlertsSidebar received alerts:', alerts); // Debug log
 
