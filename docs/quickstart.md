@@ -9,9 +9,9 @@
 
 ## Backend Setup
 
-1. Navigate to the backend directory:
+1. Navigate to the src directory:
 ```bash
-cd src/backend
+cd src
 ```
 
 2. Create and activate virtual environment:
@@ -38,16 +38,16 @@ alembic upgrade head
 
 6. Start the backend server:
 ```bash
-uvicorn gtfs_boss.main:app --reload
+PYTHONPATH=$PYTHONPATH:. uvicorn gtfs_boss.main:app --reload
 ```
 
 The backend API will be available at `http://localhost:8000`
 
 ## Frontend Setup
 
-1. Navigate to the frontend directory:
+1. Navigate to the src directory:
 ```bash
-cd src/frontend
+cd src
 ```
 
 2. Install dependencies:
@@ -73,7 +73,8 @@ The frontend will be available at `http://localhost:3000`
 ### Backend
 ```bash
 # Start backend server
-uvicorn gtfs_boss.main:app --reload
+cd src
+PYTHONPATH=$PYTHONPATH:. uvicorn gtfs_boss.main:app --reload
 
 # Run tests
 pytest
@@ -91,6 +92,7 @@ python scripts/generate_api_docs.py
 ### Frontend
 ```bash
 # Start development server
+cd src
 npm run dev
 
 # Build for production
@@ -111,12 +113,11 @@ npm run type-check
 1. Start both servers:
 ```bash
 # Terminal 1 (Backend)
-cd src/backend
-source venv/bin/activate
-uvicorn gtfs_boss.main:app --reload
+cd src
+PYTHONPATH=$PYTHONPATH:. uvicorn gtfs_boss.main:app --reload
 
 # Terminal 2 (Frontend)
-cd src/frontend
+cd src
 npm run dev
 ```
 
@@ -141,6 +142,7 @@ npm run dev
    - Check virtual environment is activated
    - Verify all dependencies are installed
    - Check database migrations are up to date
+   - Ensure PYTHONPATH is set correctly
 
 ## Stopping the Servers
 
