@@ -9,6 +9,7 @@ import type { RealtimeData, RealtimeMetrics, Alert, ValidationResults as Validat
 import ServiceAlertsSidebar from './components/ServiceAlertsSidebar';
 import { useServiceAlerts } from './hooks/useServiceAlerts';
 import ValidationPopup from './components/ValidationPopup';
+import RealtimeMetricsPopup from './components/RealtimeMetricsPopup';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -61,6 +62,7 @@ function App() {
   const [showRoutes, setShowRoutes] = useState(true);
   const [validationResults, setValidationResults] = useState<any>(null);
   const [isValidationOpen, setIsValidationOpen] = useState(false);
+  const [isMetricsOpen, setIsMetricsOpen] = useState(false);
   const [realtimeMetrics, setRealtimeMetrics] = useState<RealtimeMetrics | null>(null);
   const [metricsError, setMetricsError] = useState<string | null>(null);
 
@@ -88,6 +90,7 @@ function App() {
         onToggleStops={() => setShowStops(!showStops)}
         onToggleRoutes={() => setShowRoutes(!showRoutes)}
         onValidationClick={() => setIsValidationOpen(true)}
+        onMetricsClick={() => setIsMetricsOpen(true)}
       />
       
       <main className="app-main">
@@ -114,6 +117,12 @@ function App() {
         onClose={() => setIsValidationOpen(false)}
         validationResults={validationResults}
         onValidationResults={handleValidationResults}
+      />
+
+      <RealtimeMetricsPopup
+        isOpen={isMetricsOpen}
+        onClose={() => setIsMetricsOpen(false)}
+        metrics={realtimeMetrics}
       />
     </div>
   );

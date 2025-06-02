@@ -11,6 +11,7 @@ interface NavigationProps {
   onToggleStops: () => void;
   onToggleRoutes: () => void;
   onValidationClick: () => void;
+  onMetricsClick: () => void;
 }
 
 const Navigation: React.FC<NavigationProps> = ({
@@ -21,6 +22,7 @@ const Navigation: React.FC<NavigationProps> = ({
   onToggleStops,
   onToggleRoutes,
   onValidationClick,
+  onMetricsClick,
 }) => {
   return (
     <nav className="nav">
@@ -28,7 +30,10 @@ const Navigation: React.FC<NavigationProps> = ({
         <h1>GTFS Boss</h1>
       </div>
       <div className="nav-menu">
-        <Tools onValidationClick={onValidationClick} />
+        <Tools 
+          onValidationClick={onValidationClick}
+          onMetricsClick={onMetricsClick}
+        />
         <Options
           showVehicles={showVehicles}
           showStops={showStops}

@@ -3,9 +3,10 @@ import './Tools.css';
 
 interface ToolsProps {
   onValidationClick: () => void;
+  onMetricsClick: () => void;
 }
 
-const Tools: React.FC<ToolsProps> = ({ onValidationClick }) => {
+const Tools: React.FC<ToolsProps> = ({ onValidationClick, onMetricsClick }) => {
   const [isOpen, setIsOpen] = useState(false);
   const timeoutRef = useRef<number | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -25,6 +26,11 @@ const Tools: React.FC<ToolsProps> = ({ onValidationClick }) => {
 
   const handleValidationClick = () => {
     onValidationClick();
+    setIsOpen(false); // Close the tools menu after clicking
+  };
+
+  const handleMetricsClick = () => {
+    onMetricsClick();
     setIsOpen(false); // Close the tools menu after clicking
   };
 
@@ -56,6 +62,9 @@ const Tools: React.FC<ToolsProps> = ({ onValidationClick }) => {
           <div className="tools-controls">
             <button className="tool-item" onClick={handleValidationClick}>
               GTFS Validation
+            </button>
+            <button className="tool-item" onClick={handleMetricsClick}>
+              RT Metrics
             </button>
             <button className="tool-item coming-soon">
               Trip Planning Analysis
