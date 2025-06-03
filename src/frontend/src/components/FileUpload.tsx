@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import type { ValidationResults } from '../types';
 
 interface FileUploadProps {
-  onValidationResults: (result: any) => void;
+  onValidationResults: (result: ValidationResults | null) => void;
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ onValidationResults }) => {
@@ -47,9 +48,12 @@ const FileUpload: React.FC<FileUploadProps> = ({ onValidationResults }) => {
       }
 
       const result = await response.json();
+      console.log('Validation result received:', result);
       onValidationResults(result);
     } catch (err) {
+      console.error('Error during validation:', err);
       setError(err instanceof Error ? err.message : 'An error occurred while validating the feed');
+      onValidationResults(null);
     } finally {
       setIsLoading(false);
     }

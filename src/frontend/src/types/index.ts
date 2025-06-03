@@ -89,6 +89,7 @@ export interface RealtimeMetrics {
  * Contains metadata about the transit feed.
  */
 export interface FeedInfo {
+    feed_name?: string;          // Name of the feed
     feed_publisher_name?: string;    // Agency or organization name
     feed_lang?: string;              // Primary language of the feed
     feed_version?: string;           // Version of the feed

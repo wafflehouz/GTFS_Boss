@@ -77,6 +77,48 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
     const [center] = useState<[number, number]>([-112.074037, 33.448376]);
 
     /**
+     * Effect hook to fetch static route and stop geometry on component mount.
+     * This ensures we have the latest geometry data even without validation results.
+     */
+    useEffect(() => {
+        const fetchInitialGeometry = async () => {
+            try {
+                // Fetch route geometry
+                const routeResponse = await fetch('http://localhost:8000/api/v1/routes/geometry');
+                if (routeResponse.ok) {
+                    const routeData: CustomFeatureCollection = await routeResponse.json();
+                    setRouteFeatures(routeData);
+                    setRouteError(null);
+                } else if (routeResponse.status === 404) {
+                    setRouteError('No GTFS feed has been validated yet. Upload a feed to see static routes.');
+                } else {
+                    throw new Error(`Failed to fetch route geometry: ${routeResponse.statusText}`);
+                }
+
+                // Fetch stop geometry
+                const stopResponse = await fetch('http://localhost:8000/api/v1/stops/geometry');
+                if (stopResponse.ok) {
+                    const stopData: CustomFeatureCollection = await stopResponse.json();
+                    setStopGeometry(stopData);
+                    setStopError(null);
+                } else if (stopResponse.status === 404) {
+                    setStopError('Stops data not available in the validated feed.');
+                } else {
+                    throw new Error(`Failed to fetch stop geometry: ${stopResponse.statusText}`);
+                }
+            } catch (err) {
+                console.error('Error fetching initial geometry:', err);
+                // Don't set errors here as they might be temporary network issues
+            }
+        };
+
+        // Only fetch if map is loaded
+        if (isMapLoaded) {
+            fetchInitialGeometry();
+        }
+    }, [isMapLoaded]); // Only re-run if map load status changes
+
+    /**
      * Effect hook to initialize the MapTiler GL JS map.
      * Runs once on component mount.
      */
@@ -233,86 +275,64 @@ const RealtimeMap: React.FC<RealtimeMapProps> = ({
      * Updates the routeFeatures state.
      */
     useEffect(() => {
-        // Fetch route geometry if validation results are available
-        if (validationResults) {
-            console.log('Validation results available:', validationResults);
+        // Only fetch if we have new validation results
+        if (validationResults?.feed_info?.feed_name) {
+            console.log('New feed validated:', validationResults.feed_info.feed_name);
             const fetchRouteGeometry = async () => {
                 try {
                     const response = await fetch('http://localhost:8000/api/v1/routes/geometry');
                     if (!response.ok) {
-                        // Handle 404 specifically if no validated feed exists
                         if (response.status === 404) {
                             setRouteError('No GTFS feed has been validated yet. Upload a feed to see static routes.');
                         } else {
                             throw new Error(`Failed to fetch route geometry: ${response.statusText}`);
                         }
-                        // Clear route features on error
                         setRouteFeatures(null);
                         return;
                     }
-                    // Parse the GeoJSON response
                     const data: CustomFeatureCollection = await response.json();
-                    // Set route features state
                     setRouteFeatures(data);
-                    // Clear any previous route errors
                     setRouteError(null);
-
                 } catch (err) {
-                     // Handle fetch errors
                     setRouteError(err instanceof Error ? err.message : 'An error occurred while fetching route geometry');
-                    // Clear route features on error
                     setRouteFeatures(null);
                 }
             };
-            // Fetch route geometry
             fetchRouteGeometry();
-        } else {
-            // Clear route features if no validation results
-             setRouteFeatures(null);
         }
-    }, [validationResults]); // Re-run effect when validation results are updated
+    }, [validationResults?.feed_info?.feed_name]); // Only re-run when feed name changes
 
     /**
      * Effect hook to fetch static stop geometry when validation results change.
      * Updates the stopGeometry state.
      */
     useEffect(() => {
-         // Fetch stop geometry if validation results are available
-         if (validationResults) {
-             const fetchStopGeometry = async () => {
-                 try {
-                     const response = await fetch('http://localhost:8000/api/v1/stops/geometry');
-                     if (!response.ok) {
-                         // Handle 404 specifically if no validated feed exists
-                         if (response.status === 404) {
-                             setStopError('Stops data not available in the validated feed.');
-                         } else {
-                             throw new Error(`Failed to fetch stop geometry: ${response.statusText}`);
-                         }                          // Clear stop geometry on error
-                         setStopGeometry(null);
-                         return;
-                     }
-                     // Parse the GeoJSON response
-                     const data: CustomFeatureCollection = await response.json();
-                     // Set stop geometry state
-                     setStopGeometry(data);
-                     // Clear any previous stop errors
-                     setStopError(null);
-
-                 } catch (err) {
-                      // Handle fetch errors
-                     setStopError(err instanceof Error ? err.message : 'An error occurred while fetching stop geometry');
-                     // Clear stop geometry on error
-                     setStopGeometry(null);
-                 }
-             };
-             // Fetch stop geometry
-             fetchStopGeometry();
-         } else {
-             // Clear stop geometry if stops are not shown or no validation results
-              setStopGeometry(null);
-         }
-    }, [validationResults]); // Re-run effect when validation results are updated
+        // Only fetch if we have new validation results
+        if (validationResults?.feed_info?.feed_name) {
+            console.log('New feed validated:', validationResults.feed_info.feed_name);
+            const fetchStopGeometry = async () => {
+                try {
+                    const response = await fetch('http://localhost:8000/api/v1/stops/geometry');
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            setStopError('Stops data not available in the validated feed.');
+                        } else {
+                            throw new Error(`Failed to fetch stop geometry: ${response.statusText}`);
+                        }
+                        setStopGeometry(null);
+                        return;
+                    }
+                    const data: CustomFeatureCollection = await response.json();
+                    setStopGeometry(data);
+                    setStopError(null);
+                } catch (err) {
+                    setStopError(err instanceof Error ? err.message : 'An error occurred while fetching stop geometry');
+                    setStopGeometry(null);
+                }
+            };
+            fetchStopGeometry();
+        }
+    }, [validationResults?.feed_info?.feed_name]); // Only re-run when feed name changes
 
     /**
      * Effect hook to manage static route and stop GeoJSON layers on the map.
