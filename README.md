@@ -39,6 +39,22 @@ GTFS Boss is a comprehensive GTFS (General Transit Feed Specification) analysis 
 - Data import/export capabilities
 - Feed update monitoring
 
+## Screenshots
+
+### Interactive Map Views
+![Map View 1](screenshots-samples/map-view1.png)
+*Interactive map displaying GTFS routes, stops, and real-time vehicle positions*
+
+![Map View 2](screenshots-samples/map-view2.png)
+*Detailed map view showing route visualization and stop locations*
+
+![Map View 3](screenshots-samples/map-view3.png)
+*Map interface with vehicle tracking and status indicators*
+
+### File Upload Interface
+![Upload View](screenshots-samples/upload-view.png)
+*GTFS feed upload and validation interface*
+
 ## Technical Requirements
 
 - Node.js (v14 or higher)

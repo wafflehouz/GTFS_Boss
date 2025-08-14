@@ -1,0 +1,39 @@
+Category,Metric,Value
+Feed Info,feed_publisher_name,City of Phoenix
+Feed Info,feed_lang,en
+Feed Info,feed_version,GTFS_v4.4_20250616
+Feed Info,feed_start_date,20250728
+Feed Info,feed_end_date,20251026
+Feed Info,feed_contact_email,pubtrans@phoenix.gov
+Feed Info,feed_contact_url,https://www.phoenix.gov/publictransit/contactus
+Counts,Agencies,2
+Counts,Routes,112
+Counts,Trips,18182
+Counts,Stops,7997
+Counts,Stations,91
+Counts,Entrances,0
+Counts,Generic nodes,0
+Counts,Boarding areas,0
+Counts,Pathways,0
+Counts,Levels,0
+Counts,Shapes,546
+Counts,Transfers,4
+Counts,Service Periods,56
+Counts,Fare Attributes,0
+Service Dates - daily_service_counts,monday,313
+Service Dates - daily_service_counts,tuesday,332
+Service Dates - daily_service_counts,wednesday,333
+Service Dates - daily_service_counts,thursday,335
+Service Dates - daily_service_counts,friday,313
+Service Dates - daily_service_counts,saturday,156
+Service Dates - daily_service_counts,sunday,143
+Service Dates,total_distinct_service_days,91
+Service Dates - service_hours,earliest_service,01:48:00
+Service Dates - service_hours,latest_service,26:16:00
+Service Dates - service_hours,service_hours,24.466666666666665
+Validation,Overall Status,valid
+Validation,Health Score,90.95680110810785
+Recommendation,Consider adding pathways.txt or improving its completeness,
+Recommendation,Consider adding levels.txt or improving its completeness,
+Recommendation,Consider adding fare_attributes.txt or improving its completeness,
+Recommendation,Improve data completeness in stops.txt (currently 61.9%),
