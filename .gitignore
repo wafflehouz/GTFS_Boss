@@ -72,4 +72,8 @@ yarn-error.log*
 # Project specific
 data/
 *.db
-*.sqlite3 
+*.sqlite3
+
+# GTFS Data files
+Phoenix_GTFS_Data/
+*.txt 
