@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO)
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from .api import validation
+from gtfs_boss.api import validation
 
 app = FastAPI(
     title="GTFS Boss API",
