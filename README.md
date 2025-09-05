@@ -71,8 +71,11 @@ GTFS Boss is a comprehensive GTFS (General Transit Feed Specification) analysis 
    npm install
    ```
 3. Set up environment variables:
-   - Create a `.env` file
-   - Add required API keys and configuration
+   - Create a `.env` file in the project root
+   - Add required API keys and configuration:
+     - `VITE_MAPTILER_API_KEY`: Your MapTiler API key for map visualization
+     - `VITE_GTFS_API_URL`: Backend API URL (default: http://localhost:8000)
+     - `VITE_GTFS_RT_API_URL`: Real-time API URL (default: http://localhost:8000)
 4. Start the development server:
    ```bash
    npm run dev
@@ -93,12 +96,12 @@ GTFS Boss is a comprehensive GTFS (General Transit Feed Specification) analysis 
 
 ## Contributing
 
-We welcome contributions to GTFS Boss! Please see our contributing guidelines for more information.
+We welcome contributions to GTFS Boss! Please see our [Contributing Guidelines](CONTRIBUTING.md) for more information.
 
 ## License
 
-[License information to be added]
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
 
 ## Support
 
-For support, please [contact information to be added] 
+For support, please open an issue on GitHub or contact the maintainer. 

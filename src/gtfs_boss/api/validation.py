@@ -27,8 +27,8 @@ router = APIRouter()
 # Global variable to store the last validated feed object
 last_validated_feed: Optional[gk.Feed] = None
 
-# Define the directory for storing uploaded feeds using absolute path
-UPLOAD_DIR = Path("/Users/wafflehouz/Documents/Projects/GTFS_Boss/data/uploaded_feeds")
+# Define the directory for storing uploaded feeds using relative path
+UPLOAD_DIR = Path("data/uploaded_feeds")
 
 # Ensure the upload directory exists on startup
 @router.on_event("startup")

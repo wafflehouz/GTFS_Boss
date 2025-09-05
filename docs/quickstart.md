@@ -23,7 +23,7 @@ GTFS_Boss/
 
 1. Navigate to the project root:
 ```bash
-cd /Users/wafflehouz/Documents/Projects/GTFS_Boss
+cd /path/to/GTFS_Boss
 ```
 
 2. Navigate to the src directory:
@@ -53,7 +53,7 @@ The backend API will be available at `http://localhost:8000`
 
 1. Navigate to the project root:
 ```bash
-cd /Users/wafflehouz/Documents/Projects/GTFS_Boss
+cd /path/to/GTFS_Boss
 ```
 
 2. Navigate to the frontend directory:
@@ -78,7 +78,7 @@ The frontend will be available at `http://localhost:5173`
 ### Backend
 ```bash
 # Start backend server
-cd /Users/wafflehouz/Documents/Projects/GTFS_Boss/src
+cd /path/to/GTFS_Boss/src
 source venv/bin/activate
 PYTHONPATH=$PYTHONPATH:. uvicorn gtfs_boss.main:app --reload --port 8000
 
@@ -95,7 +95,7 @@ mypy src/
 ### Frontend
 ```bash
 # Start development server
-cd /Users/wafflehouz/Documents/Projects/GTFS_Boss/src/frontend
+cd /path/to/GTFS_Boss/src/frontend
 npm run dev
 
 # Build for production
@@ -114,14 +114,14 @@ npm run lint
 
 **Terminal 1 (Backend):**
 ```bash
-cd /Users/wafflehouz/Documents/Projects/GTFS_Boss/src
+cd /path/to/GTFS_Boss/src
 source venv/bin/activate
 PYTHONPATH=$PYTHONPATH:. uvicorn gtfs_boss.main:app --reload --port 8000
 ```
 
 **Terminal 2 (Frontend):**
 ```bash
-cd /Users/wafflehouz/Documents/Projects/GTFS_Boss/src/frontend
+cd /path/to/GTFS_Boss/src/frontend
 npm run dev
 ```
 
